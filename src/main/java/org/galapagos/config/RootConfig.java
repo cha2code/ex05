@@ -15,7 +15,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"org.galapagos.service"})
+@ComponentScan(basePackages = {"org.galapagos.service", "org.galapagos.controller"})
 @MapperScan(basePackages = {"org.galapagos.mapper"})
 public class RootConfig {
 	

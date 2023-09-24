@@ -33,6 +33,13 @@ a.page-link {
 	background-color: darkred;
 	border: none;
 	color: white;
+	
+}
+
+.btn:hover {
+	
+	background-color: darkred;
+	color: yellow;
 }
 
 .error {

@@ -4,9 +4,10 @@
 <%@ include file="../layouts/header.jsp" %>
 
 <br>
+
 <div style="width: 500px" class="mx-auto">
 
-<h1>login page</h1>
+<h1><i class="fa-solid fa-right-to-bracket"></i> login</h1>
 
 <hr>
 
@@ -16,22 +17,31 @@
 	</div>
 </c:if>
 
+<c:if test="${param.error == 'login_required'}">
+	<div class="error">
+		로그인이 필요한 서비스입니다.
+	</div>
+</c:if>
+
 <br>
 
 	<!-- action = SecurityConfig에서 정해 놓은 url -->
 	<form action="/security/login" method="post">
 
+		<!-- csrf token -->
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	
 		<div class="form-group">
-			<label for="username"><i class="fa-solid fa-user"></i> User ID : </label> 
-			<input type="text" name="username"/>
+			<label for="username"><i class="fa-solid fa-user"></i> User ID</label>
+			<br> 
+			<input type="text" name="username" style="width: 500px"/>
 			<br><br>
 		</div>
 	
 		<div class="form-group">
-			<label for="username"><i class="fa-solid fa-lock"></i> Password : </label>
-			<input type="password" name="password"/>
+			<label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+			<br>
+			<input type="password" name="password" style="width: 500px"/>
 			<br><br>
 		</div>
 	
@@ -41,9 +51,11 @@
 			</label>
 		</div>
 	
-		<button type="submit" class="btn btn-primary btn-block">
-			<i class="fa-solid fa-right-to-bracket"></i> login
-		</button>
+		<div class="btn">
+			<button type="submit" class="btn btn-primary btn-block">
+                <i class="fa-solid fa-right-to-bracket"></i> login
+        	</button>
+   	    </div>
 	
 	</form>
 </div>

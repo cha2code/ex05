@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.galapagos.mapper.TravelMapper">
+
+<!-- where절 sql part -->
+	<sql id="criteria">
+		<trim prefixOverrides = "OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like CONCAT('%',#{keyword},'%')
+						</when>
+						
+						<when test="type == 'D'.toString()">
+							description like CONCAT('%',#{keyword},'%')
+						</when>
+						
+						<when test="type == 'R'.toString()">
+							region like CONCAT('%',#{keyword},'%')
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from travel
+	
+		<where>
+			<include refid="criteria"></include>
+		</where>
+	</select>
+	
+	<select id="getList" resultType="TravelVO">
+
+		select * from travel
+		
+		<where>
+			<include refid="criteria"></include>
+		</where>
+	
+		order by region, title
+		limit #{offset}, #{amount}
+
+	</select>
+	<!-- limit에서는 수식 사용 불가 -->
+	<!-- (#{pageNum}-1) * #{amount}, #{amount} -->
+	<!-- offset:어디서 부터 가져올 지 -->
+	
+	<select id="read" resultType="TravelVO">
+		select * from travel
+		where no = #{no}
+	</select>
+	<!-- where 조건은 primary key -->
+	
+	<insert id="insert">
+		insert into travel (region, title, description, address, phone)
+		values (#{region}, #{title}, #{description},
+				#{address}, #{phone})
+
+		<selectKey resultType="Long" keyProperty="no"
+			keyColumn="no" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+
+	</insert>
+	
+	<update id="update">
+		UPDATE travel SET
+			title = #{title},
+			description = #{description},
+			address = #{address},
+			phone = #{phone}
+		WHERE no = #{no}
+	</update>
+	
+	<delete id="delete">
+		delete from travel where no = #{no}
+	</delete>
+	
+</mapper>

@@ -5,7 +5,13 @@
 
 <!-- DB의 snake case와 java의 camel case를 mapping -->
 <configuration>
+
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true" />
 	</settings>
+	
+	<typeAliases>
+		<package name="org.galapagos.domain" />		
+	</typeAliases>
+	
 </configuration>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.galapagos.mapper.BoardMapper">
+
+	<select id="getList" resultType="BoardVO">
+	<![CDATA[
+		select * from tbl_board
+		order by bno desc
+		limit 0, 10
+	]]>
+	</select>
+	
+	<select id="getListWithPaging" resultType="BoardVO">
+	
+	select * from tbl_board
+	
+	<where>
+		<include refid="criteria"></include>
+	</where>
+	order by bno desc
+	limit #{offset}, #{amount}
+	</select>
+	<!-- limit에서는 수식 사용 불가 -->
+	<!-- (#{pageNum}-1) * #{amount}, #{amount} -->
+	<!-- offset:어디서 부터 가져올 지 -->
+
+	<select id="getTotalCount" resultType="int">
+		select count(*) from tbl_board
+	
+		<where>
+			<include refid="criteria"></include>
+		</where>
+	</select>
+	
+	<insert id="insert">
+		insert into tbl_board (title, content, writer)
+		values
+		(#{title}, #{content}, #{writer})
+	</insert>
+
+	<insert id="insertSelectKey">
+		insert into tbl_board (title, content, writer)
+		values (#{title},
+		#{content}, #{writer})
+
+		<selectKey resultType="Long" keyProperty="bno"
+			keyColumn="bno" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+
+	</insert>
+
+	<select id="read" resultType="BoardVO">
+		select * from tbl_board where bno = #{bno}
+	</select>
+
+	<delete id="delete">
+		delete from tbl_board where bno = #{bno}
+	</delete>
+
+	<update id="update">
+		UPDATE tbl_board SET
+			title = #{title},
+			content = #{content},
+			writer = #{writer},
+			update_date = NOW()
+		WHERE bno = #{bno}
+	</update>
+	
+	<!-- where절 sql part -->
+	<sql id="criteria">
+		<trim prefixOverrides = "OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like CONCAT('%',#{keyword},'%')
+						</when>
+						
+						<when test="type == 'C'.toString()">
+							content like CONCAT('%',#{keyword},'%')
+						</when>
+						
+						<when test="type == 'W'.toString()">
+							writer like CONCAT('%',#{keyword},'%')
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
+	
+	
+	
+
+</mapper>

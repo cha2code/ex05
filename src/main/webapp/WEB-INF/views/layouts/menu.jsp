@@ -15,14 +15,11 @@
 		<!-- 좌측 메뉴 구성 -->
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link" href="/board/list">
-				<i class="fa-regular fa-rectangle-list"></i> 게시판1</a>
+				<i class="fa-regular fa-rectangle-list"></i> 게시판</a>
 			</li>
 			
 			<li class="nav-item"><a class="nav-link" href="/travel/list">
-				<i class="fa-solid fa-suitcase-rolling"></i> 게시판2</a>
-			</li>
-			
-			<li class="nav-item"><a class="nav-link" href="#">게시판3</a>
+				<i class="fa-solid fa-suitcase-rolling"></i> 여행</a>
 			</li>
 		</ul>
 		
@@ -30,9 +27,12 @@
 		<!-- 로그인 상태 -->	
 		<ul class="navbar-nav ml-auto">
 			<sec:authorize access="isAuthenticated()">
+				<!-- 출력하지 말고 username으로 저장 -->
+				<!-- principal = customUser -->
+				<sec:authentication property="principal.username" var="username"/>
 				<li class="nav-item">
-					<a class="nav-link" href="#">
-						<img src="https://randomuser.me/api/portraits/lego/7.jpg" class="avatar-sm" />
+					<a class="nav-link" href="/security/profile">
+						<img src="/security/avatar/sm/${username}" class="avatar-sm" />
 						<!-- 로그인 하지 않았을 때를 대비해서 바로 호출하면 안됨 -->
 						<sec:authentication property="principal.username"/>
 					</a>
