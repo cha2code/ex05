@@ -7,11 +7,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="/resources/js/rest.js"></script>
 <script src="/resources/js/comment.js"></script>
+<script src="/resources/js/reply.js"></script>
 
 <script>
 
 // 댓글 기본 URL 상수 (전역 상수)
 const COMMENT_URL = '/api/board/${param.bno}/comment/';
+const REPLY_URL = '/api/board/${param.bno}/reply/';
 
 // button event
 $(document).ready(async function() {
@@ -49,6 +51,36 @@ $(document).ready(async function() {
 
 	// 삭제 버튼 클릭
 	$('.comment-list').on('click', '.comment-delete-btn', deleteComment);
+
+	// 대댓글 버튼 이벤트 핸들링
+	// 대댓글 추가 인터페이스 보이기
+	$('.comment-list').on('click', '.reply-add-show-btn', function(e) {
+		showReplyAdd($(this), writer);
+	});
+	
+	// 대댓글 등록
+	$('.comment-list').on('click', '.reply-add-btn', function(e){
+		addReply($(this), writer);
+	});
+	
+	// 대댓글 취소
+	$('.comment-list').on('click', '.reply-add-cancel-btn', cancelReply);
+
+	// 대댓글 수정 화면 보이기
+	$('.comment-list').on('click', '.reply-update-show-btn', function(e){
+		showUpdateReply($(this));
+	});
+	
+	// 대댓글 수정 등록
+	$('.comment-list').on('click', '.reply-update', function(e){
+		updateReply($(this));
+	});
+	
+	// 대댓글 수정 취소
+	$('.comment-list').on('click', '.reply-update-cancel', cancelReplyUpdate);
+
+	// 대댓글 삭제
+	$('.comment-list').on('click', '.reply-delete-btn', deleteReply);
 }); 
 
 </script>

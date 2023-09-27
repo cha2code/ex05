@@ -1,5 +1,11 @@
-const commentUpdatable = `
 <!-- backtick : 다중 문자열 리터럴 정의, 템플릿 문자열 -->
+const replyAddable = `
+	<button class="btn btn-light btn-sm reply-add-show-btn">
+		<i class="fa-solid fa-reply"></i> 답글
+	</button>
+`;
+
+const commentUpdatable = `
 
 	<button class="btn btn-light btn-sm comment-update-show-btn">
 	<i class="fa-solid fa-pen"></i> 수정
@@ -22,29 +28,28 @@ function createCommentTemplate(comment, writer) {
 				</strong>
 					
 				<span class="text-muted ml-3 comment-date">
-					${moment(comment.regDate).format('YYYY-MM-DD hh:mm')} <!-- 날짜 -->
+					${moment(comment.regDate).format('YYYY-MM-DD hh:mm')}
 				</span>
 			</div>
 				
 			<div class="btn-group">
-				<!-- 로그인 유저 == 작성자이면 버튼을 출력, 아니면 빈 칸 출력 -->
 				${writer && (writer == comment.writer) ? commentUpdatable : ''}
+				 ${writer && (writer != comment.writer) ? replyAddable : ''}
 			</div>
 			
 		</div>
 		
-		<!-- el이 아니라 자바스크립트 코드 -->	
-		<!-- comment-content 꼭 붙여서 사용. 안그러면 개행문자 출력 -->
-		<div class="comment-body">
-			<div class="comment-content">${comment.content}</div>
-		</div>
+			<div class="comment-body">
+				<div class="comment-content">${comment.content}</div>
+			</div>
 			
-		<div class="reply-list ml-5">
-		
-		</div>
+			<div class="reply-list ml-5"></div>
 			
 	</div>
 	`;
+	
+	<!-- el이 아니라 자바스크립트 코드 -->	
+	<!-- comment-content 꼭 붙여서 사용. 안그러면 개행문자 출력 -->
 }
 
 async function loadComments(bno, writer) {
@@ -52,15 +57,24 @@ async function loadComments(bno, writer) {
 
 	let comments = [];
 
-	// API로 불러오기
+	<!-- API로 불러오기 -->
 	comments = await rest_get(COMMENT_URL);
 	
 	for(let comment of comments) {
-		const commentEl = createCommentTemplate(comment, writer);
+		const commentEl = $(createCommentTemplate(comment, writer));
 
 		<!-- jQuary로 comment-list 선택 (get의 댓글 목록) -->
 		<!-- prepend : 앞에 추가 / append : 뒤에 추가 -->
-		$('.comment-list').append($(commentEl));
+		$('.comment-list').append(commentEl);
+		
+		let replyListEl = commentEl.find('.reply-list');
+		
+		<!-- 대댓글 목록 처리 -->
+		for(let reply of comment.replyList) {
+			
+			let replyEl = $(createReplyTemplate(reply, writer));
+			replyListEl.append(replyEl);
+		};
 	}
 }
 

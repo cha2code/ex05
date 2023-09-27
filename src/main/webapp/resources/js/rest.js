@@ -43,13 +43,8 @@ async function rest_delete(url) {
 	try {
 		let res = await fetch(url, {method : "DELETE"});
 		
-		return await text();
+		return await res.json();
 	} catch(e) {
 		console.log(e);
 	}
-}
-
-function createComment(bno, writer) {
-	const content = $('.new-comment-content').val();
-	console.log(content);
 }

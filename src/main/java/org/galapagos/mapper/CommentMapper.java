@@ -7,7 +7,7 @@ import org.galapagos.domain.CommentVO;
 public interface CommentMapper {
 	
 	// 글 번호 함께 전달(FK)
-	List<CommentVO> readAll(Long no); // 목록 보기 (글 번호와 관련 있는 comment 출력)
+	List<CommentVO> readAll(Long bno); // 목록 보기 (글 번호와 관련 있는 comment 출력)
 	CommentVO get(Long no); // 상세 보기
 	
 	void create(CommentVO vo); // 생성
