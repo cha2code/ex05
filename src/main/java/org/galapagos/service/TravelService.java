@@ -19,6 +19,9 @@ public interface TravelService {
 	
 	public boolean remove(Long no);
 	
+	// 랜덤으로 가져올 사진의 개수 = count
+	public List<TravelVO> getRandom(int count);
+	
 }
 
 /*

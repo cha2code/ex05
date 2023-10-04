@@ -19,6 +19,7 @@
 
 </head>
 <body>
+	<!-- container-flude 사용 시 화면 꽉 채움 -->
 	<div class="container">
 		<header class="jumbotron mb-0 rounded-0">
 			<h1>Backend Study</h1>

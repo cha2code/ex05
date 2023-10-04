@@ -21,4 +21,7 @@ public interface TravelMapper {
 	public int delete(Long no);
 	
 	public int update(TravelVO travel);
+	
+	// 사진 랜덤으로 가져오기
+	public List<TravelVO> getRandom(int count);
 }

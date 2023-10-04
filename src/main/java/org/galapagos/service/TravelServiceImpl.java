@@ -57,6 +57,12 @@ public class TravelServiceImpl implements TravelService {
 		return mapper.delete(no) == 1;
 	}
 
+	@Override
+	public List<TravelVO> getRandom(int count) {
+		
+		return mapper.getRandom(count);
+	}
+
 }
 
 /*

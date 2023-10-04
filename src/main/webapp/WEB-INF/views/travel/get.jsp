@@ -45,6 +45,12 @@ $(document).ready(function() {
 	${travel.description}
 </div>
 
+<div class="thumb-images my-5 d-flex">
+	<c:forEach var="image" items="${travel.images}">
+			<img src="${image}">
+	</c:forEach>
+</div>
+
 <br>
 
 <div id="map" style="width:100%;height:300px;background:gray"></div>
