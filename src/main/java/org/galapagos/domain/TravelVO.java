@@ -15,6 +15,8 @@ public class TravelVO {
 	private String description;
 	private String address;
 	private String phone;
+	private String hearts;
+	private Boolean myHeart;
 	
 	// 첫 페이지에 나올 랜덤한 사진 5장
 	public String getImage() {
@@ -33,5 +35,12 @@ public class TravelVO {
 		}
 		
 		return list;
+	}
+	
+	// 카드 하단 설명 부분 요약
+	public String getSummary() {
+		
+		// summernote에서 수정 시 자동으로 p태그가 붙어 css가 적용 불가되므로 제거함
+		return description.split("<br>")[0].replace("<p>","");
 	}
 }

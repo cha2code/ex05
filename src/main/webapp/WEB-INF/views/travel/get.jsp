@@ -4,6 +4,9 @@
 
 <%@include file="../layouts/header.jsp"%>
 
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js">
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
 
 <script>
 $(document).ready(function() {
@@ -12,6 +15,15 @@ $(document).ready(function() {
 		if(!confirm('정말 삭제할까요?')) return;		
 		document.forms.removeForm.submit();
 	});	
+	
+	Fancybox.bind('[data-fancybox="gallery"]', {
+		
+	});
+	
+	$('.sm-images > img').mouseenter(function(e) {
+		let src = $(this).attr('src');
+		$('.image-pannel > img').attr('src', src);
+	});
 
 }); 
 
@@ -41,17 +53,28 @@ $(document).ready(function() {
 	
 <hr>
 
-<div>
+<div class="clearfix">
+	<div class="image-panel float-left mr-3 mb-5">
+		<img src="${travel.image}">
+		<div class="sm-images mt-1 ml-1 d-flex">
+			<c:forEach var="image" items="${travel.images}">
+				<img src="${image}">
+			</c:forEach>                                
+		</div>
+	</div>
 	${travel.description}
 </div>
 
+<br>
+
+<%-- <!-- data-XXXX="OOOO" : 임의로 결정 -->
 <div class="thumb-images my-5 d-flex">
 	<c:forEach var="image" items="${travel.images}">
+		<a href="${image}" data-fancybox="gallery">
 			<img src="${image}">
+		</a>
 	</c:forEach>
-</div>
-
-<br>
+</div> --%>
 
 <div id="map" style="width:100%;height:300px;background:gray"></div>
 

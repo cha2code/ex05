@@ -1,5 +1,7 @@
 package org.galapagos.controller;
 
+import java.security.Principal;
+
 import org.galapagos.domain.Criteria;
 import org.galapagos.domain.PageDTO;
 import org.galapagos.domain.TravelVO;
@@ -23,12 +25,13 @@ public class TravelController {
 	
 	@GetMapping("/list")
 	public void list(@ModelAttribute("cri") Criteria cri,
+			Principal principal,
 			Model model) {
 		
 		// TravelService 인터페이스를 통해 getTotal() 호출
 				int total = service.getTotal(cri);
 		
-		model.addAttribute("list", service.getList(cri));
+		model.addAttribute("list", service.getList(cri, principal));
 
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 	}
@@ -36,9 +39,10 @@ public class TravelController {
 	@GetMapping({ "/get", "/modify" })
 	public void get(@RequestParam("no") Long no,
 			@ModelAttribute("cri") Criteria cri,
+			Principal principal,
 			Model model) {
 		
-		model.addAttribute("travel", service.get(no));
+		model.addAttribute("travel", service.get(no, principal));
 	}
 	
 	// 실제 DB에 업데이트

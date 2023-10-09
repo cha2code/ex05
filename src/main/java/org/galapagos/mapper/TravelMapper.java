@@ -3,6 +3,7 @@ package org.galapagos.mapper;
 import java.util.List;
 
 import org.galapagos.domain.Criteria;
+import org.galapagos.domain.HeartVO;
 import org.galapagos.domain.TravelVO;
 
 public interface TravelMapper {
@@ -24,4 +25,9 @@ public interface TravelMapper {
 	
 	// 사진 랜덤으로 가져오기
 	public List<TravelVO> getRandom(int count);
+	
+	// 좋아요 처리
+	public List<Long> getHeartsList(String username);
+	public int addHeart(HeartVO heart);
+	public int deleteHeart(HeartVO heart);
 }
