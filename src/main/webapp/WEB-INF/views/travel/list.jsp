@@ -5,6 +5,62 @@
 
 <script src="../resources/js/search.js"></script>
 
+<c:if test="${not empty username}">
+	<style>
+		.fa-heart {
+			cursor: pointer;
+		}
+	</style>
+
+	<script src="../resources/js/rest.js"></script>
+	<script>
+		$(document).ready(function() {
+		
+			let username = '${username}';
+			const BASE_URL = '/api/travel/heart';
+		
+			// 좋아요 추가
+			$('span.heart').on('click', '.fa-heart.fa-regular', async function(e){
+				
+				let tno = parseInt($(this).data("tno"));
+				let heart = {tno, username};
+				console.log(heart);
+				
+				await rest_create(BASE_URL + "/add", heart);
+				
+				let heartCount = $(this).parent().find(".heart-count");
+				console.log(heartCount);
+				
+				let count = parseInt(heartCount.text());
+				heartCount.text(count+1);
+				
+				$(this)
+					.removeClass('fa-regular')
+					.addClass('fa-solid');
+			});
+			
+			// 좋아요 제거
+			$('span.heart').on('click', '.fa-heart.fa-solid', async function(e){
+				
+				let tno = parseInt($(this).data("tno"));
+				
+				await rest_delete(
+						`\${BASE_URL}/delete?tno=\${tno}&username=\${username}`);
+				
+				let heartCount = $(this).parent().find(".heart-count");
+				console.log(heartCount);
+				
+				let count = parseInt(heartCount.text());
+				heartCount.text(count-1);
+				
+				$(this)
+					.removeClass('fa-solid')
+					.addClass('fa-regular');
+			});
+		});
+	</script>
+</c:if>
+
 <!-- 가로줄 긋기 -->
 <hr>
 
@@ -59,10 +115,12 @@
 						</a>
 					</h4>
 					
-					<a href="#" class="heart">
-						<i class="${travel.myHeart ? 'fa-solid' : 'fa-regular'} fa-heart text-danger"></i>
-					</a>
-					${travel.hearts}
+					<span class="heart">
+						<i class="${travel.myHeart ? 'fa-solid' : 'fa-regular'} fa-heart text-danger"
+						data-tno="${travel.no}"></i>
+						
+						<span class="heart-count">${travel.hearts}</span>
+					</span>
 					<p class="card-text">${travel.summary}</p>
 				</div>
 			</div>

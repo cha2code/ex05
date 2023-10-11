@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class HeartVO {
 	
-	private Long bno;
+	private Long tno;
 	private String username;
 
 }

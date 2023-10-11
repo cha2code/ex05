@@ -1,4 +1,3 @@
-<!-- REST API -->
 
 async function rest_get(url) {
 	try {
@@ -15,7 +14,7 @@ async function rest_create(url, data) {
 			method : "POST",
 			headers : {"Content-Type" : "application/json"},
 			
-			<!-- 직렬화 (데이터 전송) -->
+			
 			body : JSON.stringify(data),
 		});
 		return await res.json();

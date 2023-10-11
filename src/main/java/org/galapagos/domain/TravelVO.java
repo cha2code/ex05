@@ -16,6 +16,7 @@ public class TravelVO {
 	private String address;
 	private String phone;
 	private String hearts;
+	// 작성자가 하트를 눌렀는지 여부
 	private Boolean myHeart;
 	
 	// 첫 페이지에 나올 랜덤한 사진 5장
