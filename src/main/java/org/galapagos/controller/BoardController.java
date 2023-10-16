@@ -1,7 +1,11 @@
 package org.galapagos.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.galapagos.domain.BoardAttachmentVO;
 import org.galapagos.domain.BoardVO;
 import org.galapagos.domain.Criteria;
 import org.galapagos.domain.PageDTO;
@@ -10,20 +14,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Controller
 @Log4j
 @RequestMapping("/board")
-@AllArgsConstructor
 public class BoardController {
 
 	@Autowired
@@ -53,7 +59,8 @@ public class BoardController {
 	@PostMapping("/register")
 	public String Register(@Valid @ModelAttribute("board") BoardVO board,
 			Errors errors,
-			RedirectAttributes rttr) {
+			List<MultipartFile> files,
+			RedirectAttributes rttr) throws Exception {
 
 		log.info("register" + board);
 		
@@ -61,7 +68,7 @@ public class BoardController {
 			return "board/register";
 		}
 		
-		service.register(board);
+		service.register(board, files);
 		rttr.addFlashAttribute("result", board.getBno());
 
 		return "redirect:/board/list";
@@ -79,8 +86,9 @@ public class BoardController {
 	@PostMapping("/modify")
 	public String modify(@Valid @ModelAttribute("board") BoardVO board,
 			Errors errors,
+			List<MultipartFile> files,
 			@ModelAttribute("cri") Criteria cri,
-			RedirectAttributes rttr) {
+			RedirectAttributes rttr) throws Exception {
 
 		log.info("modify : " + board);
 		
@@ -88,7 +96,7 @@ public class BoardController {
 			return "board/modify";
 		}
 
-		if (service.modify(board)) {
+		if (service.modify(board, files)) {
 
 			rttr.addFlashAttribute("result", "success");
 			rttr.addAttribute("bno", board.getBno());
@@ -120,6 +128,25 @@ public class BoardController {
 		}
 		
 		return "redirect:" +cri.getLink("/board/list");
+	}
+	
+	@GetMapping("/download/{no}")
+	@ResponseBody
+	public void download(@PathVariable("no") Long no,
+						HttpServletResponse response) throws Exception {
+		
+		BoardAttachmentVO attach = service.getAttachment(no);
+		
+		attach.download(response); // controller가 response를 요구하면 얻을 수 있음
+	}
+	
+	@DeleteMapping("/remove/attach/{no}")
+	@ResponseBody
+ 	public String removeAttach(@PathVariable("no") Long no) throws Exception {
+		
+		service.removeAttachment(no);
+		
+		return "OK";
 	}
 
 }

@@ -10,6 +10,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -17,6 +20,8 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @ComponentScan(basePackages = {"org.galapagos.service", "org.galapagos.controller"})
 @MapperScan(basePackages = {"org.galapagos.mapper"})
+@EnableAspectJAutoProxy
+@EnableTransactionManagement
 public class RootConfig {
 	
 	@Autowired
@@ -47,6 +52,14 @@ public class RootConfig {
 		
 		sqlSessionFactory.setDataSource(dataSource());
 		return (SqlSessionFactory) sqlSessionFactory.getObject();
+	}
+	
+	@Bean
+	public DataSourceTransactionManager transactionManager() {
+		
+		DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
+		
+		return manager;
 	}
 
 }
